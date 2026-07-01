@@ -1,26 +1,234 @@
-document.addEventListener('DOMContentLoaded', function () {
-  var toggle = document.querySelector('.nav-toggle');
-  var nav = document.querySelector('.nav');
-  if (toggle && nav) {
-    toggle.addEventListener('click', function () {
-      nav.classList.toggle('open');
-      var expanded = nav.classList.contains('open');
-      toggle.setAttribute('aria-expanded', expanded);
-    });
-    nav.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () { nav.classList.remove('open'); });
-    });
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shreehari Bhattarai — Power BI & Microsoft Fabric Notes</title>
+<meta name="description" content="Practical Power BI and Microsoft Fabric tutorials, DAX patterns, Direct Lake notes, and certification guidance from Shreehari Bhattarai, a Fabric Analytics Engineer (DP-600), Fabric Data Engineer (DP-700) and Power BI Data Analyst (PL-300).">
+<meta name="keywords" content="Power BI, Microsoft Fabric, DAX, Direct Lake, Power Query, DP-600, DP-700, PL-300, semantic model, data analytics blog">
+<link rel="canonical" href="https://www.shreeharibhattarai.com.np/">
+<meta name="robots" content="index, follow">
 
-  var form = document.querySelector('.subscribe-form');
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var btn = form.querySelector('button');
-      var original = btn.textContent;
-      btn.textContent = 'Subscribed';
-      btn.disabled = true;
-      setTimeout(function () { btn.textContent = original; btn.disabled = false; form.reset(); }, 2500);
-    });
-  }
-});
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Shreehari Bhattarai — Power BI & Microsoft Fabric Notes">
+<meta property="og:description" content="Tutorials, tips and field notes on Power BI and Microsoft Fabric, written by a working BI engineer.">
+<meta property="og:url" content="https://www.shreeharibhattarai.com.np/">
+<meta property="og:image" content="https://www.shreeharibhattarai.com.np/images/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Shreehari Bhattarai",
+  "url": "https://www.shreeharibhattarai.com.np/",
+  "jobTitle": "Power BI & Microsoft Fabric Specialist",
+  "sameAs": ["https://www.linkedin.com/in/shreehari-bhattarai-55b09698/"],
+  "knowsAbout": ["Power BI", "Microsoft Fabric", "DAX", "Power Query", "Direct Lake", "Data Engineering"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Power BI & Microsoft Fabric Notes",
+  "url": "https://www.shreeharibhattarai.com.np/",
+  "author": { "@type": "Person", "name": "Shreehari Bhattarai" }
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo">shreehari<span>.</span>bi</a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <nav class="nav">
+      <a href="index.html" class="active">Home</a>
+      <a href="blog.html">Articles</a>
+      <a href="about.html">About</a>
+      <a href="about.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero on-dark">
+  <div class="container">
+    <div>
+      <p class="eyebrow">Power BI &amp; Microsoft Fabric, in practice</p>
+      <h1>Field notes for people who <em>ship</em> semantic models, not just slides.</h1>
+      <p class="lede">Tutorials, DAX patterns, Direct Lake findings and certification guidance from a working Fabric Analytics Engineer — based in Kathmandu, read everywhere.</p>
+      <div class="hero-ctas">
+        <a href="blog.html" class="btn btn-primary">Read the latest articles</a>
+        <a href="about.html" class="btn btn-outline">About Shreehari</a>
+      </div>
+    </div>
+
+    <div class="report-canvas" aria-hidden="true">
+      <div class="rc-titlebar"><span><span class="rc-dot"></span>semantic_model.pbix — live</span><span>Direct Lake</span></div>
+      <div class="rc-grid">
+        <div class="rc-card">
+          <div class="rc-label">Total Sales YTD</div>
+          <div class="rc-value amber">Rs 4.82M</div>
+        </div>
+        <div class="rc-card">
+          <div class="rc-label">Refresh Time</div>
+          <div class="rc-value teal">0.0s</div>
+        </div>
+        <div class="rc-card wide">
+          <div class="rc-label">Sales by Region — DAX measure</div>
+          <div class="rc-bars">
+            <span style="height:40%"></span><span style="height:65%"></span><span style="height:30%"></span>
+            <span style="height:80%"></span><span style="height:55%"></span><span style="height:90%"></span>
+            <span style="height:48%"></span><span style="height:70%"></span>
+          </div>
+        </div>
+        <div class="rc-card wide">
+          <div class="rc-label">CALCULATE( [Revenue], DATESYTD('Date'[Date]) )</div>
+          <div class="rc-line">
+            <svg viewBox="0 0 300 46" preserveAspectRatio="none">
+              <polyline points="0,40 30,32 60,34 90,20 120,24 150,12 180,18 210,8 240,14 270,4 300,6" fill="none" stroke="#E8A33D" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="measure-strip" aria-hidden="true">
+  <div class="measure-track">
+    <span class="measure-item"><span class="m-name">Total Revenue</span> := SUM(Sales[Amount]) <span class="m-result">→ Rs 12.4M</span></span>
+    <span class="measure-item"><span class="m-name">YoY Growth %</span> := DIVIDE([Rev]-[Rev PY],[Rev PY]) <span class="m-result">→ 18.2%</span></span>
+    <span class="measure-item"><span class="m-name">Direct Lake Fallback</span> := COUNTROWS('Sys Log') <span class="m-result">→ 0 rows</span></span>
+    <span class="measure-item"><span class="m-name">Active Customers</span> := DISTINCTCOUNT(Sales[CustID]) <span class="m-result">→ 8,213</span></span>
+    <span class="measure-item"><span class="m-name">Capacity Utilization</span> := AVG('CU Log'[Pct]) <span class="m-result">→ 64%</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="measure-item"><span class="m-name">Total Revenue</span> := SUM(Sales[Amount]) <span class="m-result">→ Rs 12.4M</span></span>
+    <span class="measure-item"><span class="m-name">YoY Growth %</span> := DIVIDE([Rev]-[Rev PY],[Rev PY]) <span class="m-result">→ 18.2%</span></span>
+    <span class="measure-item"><span class="m-name">Direct Lake Fallback</span> := COUNTROWS('Sys Log') <span class="m-result">→ 0 rows</span></span>
+    <span class="measure-item"><span class="m-name">Active Customers</span> := DISTINCTCOUNT(Sales[CustID]) <span class="m-result">→ 8,213</span></span>
+    <span class="measure-item"><span class="m-name">Capacity Utilization</span> := AVG('CU Log'[Pct]) <span class="m-result">→ 64%</span></span>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Latest articles</p>
+        <h2>From the model, to the page</h2>
+      </div>
+      <a href="blog.html" class="btn btn-outline-light">View all articles &rarr;</a>
+    </div>
+
+    <div class="post-grid">
+      <a href="blog/direct-lake-fallback-guide.html" class="post-card featured">
+        <div class="p-date">Jun 24, 2026 · Microsoft Fabric</div>
+        <h3>Direct Lake fallback: why your "instant" report just got slow</h3>
+        <p class="p-excerpt">A walkthrough of the conditions that silently push Direct Lake semantic models back to DirectQuery — and the monitoring habits that catch it before your users do.</p>
+        <span class="p-tag">#directlake #fabric #performance</span>
+      </a>
+      <a href="blog/dax-context-transition.html" class="post-card">
+        <div class="p-date">Jun 12, 2026 · DAX</div>
+        <h3>Context transition, explained with a grocery receipt</h3>
+        <p class="p-excerpt">The one DAX concept that trips up every analyst moving from Excel. No jargon, one analogy.</p>
+        <span class="p-tag">#dax #fundamentals</span>
+      </a>
+      <a href="blog/pl300-dp600-study-path.html" class="post-card">
+        <div class="p-date">May 29, 2026 · Certification</div>
+        <h3>PL-300 → DP-600 → DP-700: an honest study order</h3>
+        <p class="p-excerpt">Which certification to take first, what overlaps, and where each exam actually gets hard.</p>
+        <span class="p-tag">#certification #career</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--paper-2);">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Browse by topic</p>
+        <h2>Find what you're stuck on</h2>
+      </div>
+    </div>
+    <div class="topics">
+      <a href="blog.html?topic=fabric" class="topic-pill">Microsoft Fabric</a>
+      <a href="blog.html?topic=powerbi" class="topic-pill">Power BI</a>
+      <a href="blog.html?topic=dax" class="topic-pill">DAX</a>
+      <a href="blog.html?topic=power-query" class="topic-pill">Power Query / M</a>
+      <a href="blog.html?topic=direct-lake" class="topic-pill">Direct Lake</a>
+      <a href="blog.html?topic=semantic-models" class="topic-pill">Semantic Models</a>
+      <a href="blog.html?topic=capacity" class="topic-pill">Capacity &amp; Cost</a>
+      <a href="blog.html?topic=certification" class="topic-pill">Certification</a>
+      <a href="blog.html?topic=career" class="topic-pill">Career</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container about-grid">
+    <div class="about-photo">photo placeholder — /images/profile.jpg</div>
+    <div>
+      <p class="eyebrow">Who's writing this</p>
+      <h2>Hi, I'm Shreehari.</h2>
+      <p>I work in the Microsoft data and business intelligence space — building semantic models, Fabric lakehouses, and the reports people actually open every morning. This site is where I write down what I learn, mostly so future-me stops Googling the same DAX pattern twice.</p>
+      <div class="cert-row">
+        <div class="cert-chip"><span class="c-code">DP-600</span><span class="c-name">Fabric Analytics Engineer</span></div>
+        <div class="cert-chip"><span class="c-code">DP-700</span><span class="c-name">Fabric Data Engineer</span></div>
+        <div class="cert-chip"><span class="c-code">PL-300</span><span class="c-name">Power BI Data Analyst</span></div>
+      </div>
+      <p style="margin-top:1.6em;"><a href="about.html" class="btn btn-outline-light">More about me &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="container">
+    <h2>Get new articles by email</h2>
+    <p>One email when something's worth reading. No spam, unsubscribe anytime.</p>
+    <form class="subscribe-form">
+      <input type="email" required placeholder="you@email.com" aria-label="Email address">
+      <button type="submit" class="btn btn-primary">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div>
+      <a href="index.html" class="logo" style="margin-bottom:1em;display:inline-flex;">shreehari<span>.</span>bi</a>
+      <p style="max-width:32ch;">Power BI &amp; Microsoft Fabric notes from Kathmandu, Nepal.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h4>Site</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="blog.html">Articles</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul>
+          <li><a href="https://www.linkedin.com/in/shreehari-bhattarai-55b09698/" rel="noopener" target="_blank">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    &copy; 2026 Shreehari Bhattarai. Built with plain HTML, on purpose.
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
